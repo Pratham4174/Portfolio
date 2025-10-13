@@ -1,7 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Calendar, DownloadCloud, ExternalLink, Github, Linkedin, Mail, MapPin, Phone, Sparkles } from "lucide-react";
+import { Calendar, Cloud, Code, Container, Database, DownloadCloud, ExternalLink, GitBranch, Github, Layers, Linkedin, Mail, MapPin, Phone, Server, Sparkles, Terminal, Workflow, Zap } from "lucide-react";
 import React, { useEffect, useState, type JSX } from "react";
 import Tilt from "react-parallax-tilt";
+import resumePDF from '../assets/Pratham_Res_B.pdf';
 
 type Project = {
   id: string;
@@ -19,15 +20,15 @@ const projectsSeed: Project[] = [
     title: "SmartCharge - EV Route Planner",
     description: "AI-powered EV trip optimization system with real-time wait time predictions using XGBoost and route optimization.",
     tags: ["Java", "Spring Boot", "ReactTS", "Machine Learning", "FlaskAPI", "XGBoost"],
-    github: "#",
+    github: "https://github.com/Pratham4174/smartChargerBkend.git",
     live: "#",
   },
   {
     id: "p2",
-    title: "Networq - Professional Network",
-    description: "Scalable microservices architecture with Spring Boot, REST APIs, and service discovery for professional networking.",
-    tags: ["Java", "Spring Boot", "Microservices", "REST API", "Spring Consul", "MySQL"],
-    github: "#",
+    title: "PlayBox - Sports Booking App",
+    description: "React Native sports venue booking application with Java backend, featuring real-time availability and secure payments.",
+    tags: ["React Native", "Java", "Spring Boot", "Mobile Development", "REST API", "Payment Integration"],
+    github: "https://github.com/Pratham4174/Playbox.git",
     live: "#",
   },
   {
@@ -35,15 +36,61 @@ const projectsSeed: Project[] = [
     title: "Government TDS System",
     description: "Spring Boot microservices transformation with Kafka pipelines and multithreading for tax processing system.",
     tags: ["Spring Boot", "Apache Kafka", "Multithreading", "Apache Camel", "Microservices"],
-    github: "#",
   },
 ];
+
+// Advanced skills data with professional icons
+const skillsData = {
+  languages: [
+    { name: "Java", icon: Code, level: 95, category: "Backend" },
+    { name: "SQL", icon: Database, level: 90, category: "Database" },
+    { name: "JavaScript", icon: Code, level: 88, category: "Frontend" },
+    { name: "TypeScript", icon: Code, level: 85, category: "Frontend" },
+    { name: "HTML/CSS", icon: Layers, level: 92, category: "Frontend" },
+    { name: "OOP Concepts", icon: Workflow, level: 94, category: "Fundamentals" },
+    { name: "Linux", icon: Terminal, level: 82, category: "Systems" }
+  ],
+  technologies: [
+    { name: "Spring Boot", icon: Server, level: 92, category: "Backend" },
+    { name: "REST API", icon: Zap, level: 90, category: "Architecture" },
+    { name: "Hibernate", icon: Database, level: 85, category: "ORM" },
+    { name: "Spring JDBC", icon: Database, level: 83, category: "Database" },
+    { name: "Maven", icon: Workflow, level: 88, category: "Build Tools" },
+    { name: "Apache Camel", icon: Workflow, level: 78, category: "Integration" },
+    { name: "Apache Kafka", icon: Zap, level: 80, category: "Messaging" },
+    { name: "MVC Architecture", icon: Layers, level: 89, category: "Architecture" },
+    { name: "JUnit", icon: Code, level: 86, category: "Testing" },
+    { name: "MQ", icon: Zap, level: 75, category: "Messaging" }
+  ],
+  tools: [
+    { name: "Git", icon: GitBranch, level: 91, category: "Version Control" },
+    { name: "MySQL", icon: Database, level: 89, category: "Database" },
+    { name: "Spring Consul", icon: Server, level: 76, category: "Service Discovery" },
+    { name: "Kafka", icon: Zap, level: 79, category: "Streaming" },
+    { name: "NoSQL", icon: Database, level: 72, category: "Database" },
+    { name: "VS Code", icon: Code, level: 94, category: "IDE" },
+    { name: "STS", icon: Code, level: 88, category: "IDE" },
+    { name: "AWS", icon: Cloud, level: 75, category: "Cloud" },
+    { name: "ReactTS", icon: Layers, level: 84, category: "Frontend" },
+    { name: "CI/CD Pipeline", icon: Workflow, level: 81, category: "DevOps" },
+    { name: "Jenkins", icon: Server, level: 77, category: "DevOps" },
+    { name: "Kubernetes", icon: Container, level: 70, category: "Containerization" }
+  ]
+};
 
 export default function AdvancedPortfolio(): JSX.Element {
   const [dark, setDark] = useState<boolean>(false);
   const [projects, setProjects] = useState<Project[]>([]);
   const [activeProject, setActiveProject] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: ""
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [activeSkillCategory, setActiveSkillCategory] = useState<string>("all");
 
   useEffect(() => {
     setIsLoading(true);
@@ -57,6 +104,53 @@ export default function AdvancedPortfolio(): JSX.Element {
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
   }, [dark]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus("idle");
+
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/prathamgupta4174@gmail.com", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          _subject: "New Portfolio Contact - " + formData.name,
+          _captcha: "false"
+        })
+      });
+
+      if (response.ok) {
+        setSubmitStatus("success");
+        setFormData({ name: "", email: "", message: "" });
+        
+        const mailtoLink = `mailto:prathamgupta4174@gmail.com?subject=Portfolio Contact from ${encodeURIComponent(formData.name)}&body=${encodeURIComponent(formData.message + "\n\nFrom: " + formData.email)}`;
+        window.location.href = mailtoLink;
+      } else {
+        throw new Error('Form submission failed');
+      }
+    } catch (error) {
+      setSubmitStatus("error");
+      const mailtoLink = `mailto:prathamgupta4174@gmail.com?subject=Portfolio Contact from ${encodeURIComponent(formData.name)}&body=${encodeURIComponent(formData.message + "\n\nFrom: " + formData.email)}`;
+      window.location.href = mailtoLink;
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -76,71 +170,30 @@ export default function AdvancedPortfolio(): JSX.Element {
     }
   };
 
+  // Get all unique categories for filtering
+  const allCategories = Array.from(new Set([
+    ...skillsData.languages.map(s => s.category),
+    ...skillsData.technologies.map(s => s.category),
+    ...skillsData.tools.map(s => s.category)
+  ]));
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-100 dark:from-gray-900 dark:via-purple-900/20 dark:to-slate-900 text-gray-900 dark:text-gray-100 transition-all duration-700 overflow-x-hidden">
-      {/* Enhanced Animated Background */}
+      {/* Background elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <motion.div 
           className="absolute top-1/4 -left-20 w-96 h-96 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full blur-3xl opacity-20"
-          animate={{ 
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360],
-          }}
-          transition={{ 
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
+          animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
         />
         <motion.div 
           className="absolute bottom-1/4 -right-20 w-96 h-96 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full blur-3xl opacity-20"
-          animate={{ 
-            scale: [1.2, 1, 1.2],
-            rotate: [360, 180, 0],
-          }}
-          transition={{ 
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-        <motion.div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full blur-3xl opacity-10"
-          animate={{ 
-            scale: [1, 1.5, 1],
-            x: [-100, 100, -100],
-          }}
-          transition={{ 
-            duration: 15,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
+          animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
         />
       </div>
 
-      {/* Floating Particles */}
-      <div className="fixed inset-0 pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full opacity-30"
-            initial={{ 
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-            }}
-            animate={{
-              y: [0, -100, 0],
-              opacity: [0.3, 0.8, 0.3],
-            }}
-            transition={{
-              duration: 5 + Math.random() * 5,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-          />
-        ))}
-      </div>
-
+      {/* Header */}
       <header className="relative w-full px-6 py-8 flex items-center justify-between">
         <motion.div
           initial={{ y: -20, opacity: 0 }}
@@ -150,23 +203,12 @@ export default function AdvancedPortfolio(): JSX.Element {
           <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
             Pratham Gupta
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 mt-2">Full-Stack Developer & Software Engineer</p>
+          <p className="text-lg text-gray-600 dark:text-gray-400 mt-2">Java Full-Stack Developer</p>
         </motion.div>
-
         <nav className="flex items-center gap-4">
-          {/* <motion.button
-            aria-label="Toggle theme"
-            onClick={() => setDark((d) => !d)}
-            className="p-3 rounded-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-300"
-            whileHover={{ scale: 1.1, rotate: 180 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            {dark ? <Sun size={22} className="text-amber-400" /> : <Moon size={22} className="text-indigo-600" />}
-          </motion.button> */}
-
           <motion.a
             href="#contact"
-            className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-gradient-to-a from-cyan-500 to-blue-600 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+            className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-gradient-to-g from-cyan-500 to-blue-600 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -176,13 +218,14 @@ export default function AdvancedPortfolio(): JSX.Element {
       </header>
 
       <main className="relative w-full px-6 pb-20">
-        {/* HERO SECTION - Full Width */}
+        {/* HERO SECTION - Same as before */}
         <motion.section 
           className="w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[90vh] py-12"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
+          {/* Hero content remains the same */}
           <motion.div variants={itemVariants} className="max-w-4xl">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -223,7 +266,7 @@ export default function AdvancedPortfolio(): JSX.Element {
             >
               <motion.a
                 href="#projects"
-                className="px-8 py-4 rounded-2xl bg-white/80 dark:bg-gray-800/80 to-blue-600 text-white font-bold text-lg shadow-2xl hover:shadow-3xl transition-all duration-300"
+                className="px-8 py-4 rounded-2xl bg-gradient-to-g from-cyan-500 to-blue-600 text-white font-bold text-lg shadow-2xl hover:shadow-3xl transition-all duration-300"
                 whileHover={{ scale: 1.05, y: -3 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -231,17 +274,16 @@ export default function AdvancedPortfolio(): JSX.Element {
               </motion.a>
 
               <motion.a
-                href="/resume.pdf"
+                href={resumePDF}
                 className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-300 dark:border-gray-600 font-bold text-lg hover:shadow-2xl transition-all duration-300"
                 whileHover={{ scale: 1.05, y: -3 }}
                 whileTap={{ scale: 0.95 }}
-                download
+                download="Pratham_Gupta_Resume.pdf"
               >
                 <DownloadCloud size={22} /> Download Resume
               </motion.a>
             </motion.div>
 
-            {/* Contact Info */}
             <motion.div 
               className="mt-12 flex flex-wrap gap-8 text-lg"
               variants={itemVariants}
@@ -257,7 +299,6 @@ export default function AdvancedPortfolio(): JSX.Element {
               </a>
             </motion.div>
 
-            {/* Enhanced Stats */}
             <motion.div 
               className="mt-16 grid grid-cols-3 gap-8 max-w-2xl"
               variants={containerVariants}
@@ -305,7 +346,6 @@ export default function AdvancedPortfolio(): JSX.Element {
                         and machine learning algorithms for seamless journey planning.
                       </p>
                     </div>
-
                     <div className="mt-8 flex items-center justify-between">
                       <div className="flex gap-4 items-center">
                         <div className="w-16 h-16 rounded-2xl bg-white/80 dark:bg-gray-800/80 flex items-center justify-center shadow-lg">
@@ -331,7 +371,7 @@ export default function AdvancedPortfolio(): JSX.Element {
           </motion.div>
         </motion.section>
 
-        {/* PROJECTS SECTION - Full Width */}
+        {/* PROJECTS SECTION - Same as before */}
         <motion.section 
           id="projects" 
           className="w-full mt-32"
@@ -383,7 +423,7 @@ export default function AdvancedPortfolio(): JSX.Element {
           </motion.div>
         </motion.section>
 
-        {/* EXPERIENCE & SKILLS - Full Width */}
+        {/* ADVANCED SKILLS SECTION */}
         <motion.section 
           className="w-full mt-40"
           initial={{ opacity: 0, y: 80 }}
@@ -399,80 +439,126 @@ export default function AdvancedPortfolio(): JSX.Element {
             viewport={{ once: true }}
           >
             <h3 className="text-5xl font-bold mb-6">
-              Experience & <span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">Expertise</span>
+              Technical <span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">Expertise</span>
+            </h3>
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+              Comprehensive skill set spanning full-stack development, cloud technologies, and modern software architecture
+            </p>
+          </motion.div>
+
+          {/* Skills Filter */}
+          <motion.div 
+            className="flex justify-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            viewport={{ once: true }}
+          >
+            <div className="flex flex-wrap gap-4 justify-center">
+              <motion.button
+                onClick={() => setActiveSkillCategory("all")}
+                className={`px-6 py-3 rounded-2xl font-semibold transition-all duration-300 ${
+                  activeSkillCategory === "all" 
+                    ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-2xl" 
+                    : "bg-white/60 dark:bg-gray-800/60 text-gray-700 dark:text-gray-300 hover:shadow-xl"
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                All Skills
+              </motion.button>
+              {allCategories.map((category) => (
+                <motion.button
+                  key={category}
+                  onClick={() => setActiveSkillCategory(category)}
+                  className={`px-6 py-3 rounded-2xl font-semibold transition-all duration-300 ${
+                    activeSkillCategory === category 
+                      ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-2xl" 
+                      : "bg-white/60 dark:bg-gray-800/60 text-gray-700 dark:text-gray-300 hover:shadow-xl"
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {category}
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Advanced Skills Grid */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <GlassCard className="p-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Object.entries(skillsData).map(([category, skills]) => (
+                  <SkillCategorySection
+                    key={category}
+                    title={category.charAt(0).toUpperCase() + category.slice(1)}
+                    skills={skills.filter(skill => 
+                      activeSkillCategory === "all" || skill.category === activeSkillCategory
+                    )}
+                    delay={0.2}
+                  />
+                ))}
+              </div>
+            </GlassCard>
+          </motion.div>
+        </motion.section>
+
+        {/* EXPERIENCE SECTION */}
+        <motion.section 
+          className="w-full mt-40"
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-5xl font-bold mb-6">
+              Professional <span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">Journey</span>
             </h3>
           </motion.div>
 
-          <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-12">
-            {/* Experience Timeline */}
-            <motion.div
-              initial={{ opacity: 0, x: -80 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <GlassCard title="Professional Journey" className="h-full">
-                <div className="space-y-8">
-                  <TimelineItem 
-                    year="2024 - Present" 
-                    title="Specialist Programmer · Infosys" 
-                    location="Bangalore, Karnataka"
-                    description="Transformed legacy TDS system to Spring Boot microservices, implemented Kafka pipelines, and optimized performance with multithreading."
-                    technologies={["Spring Boot", "Apache Kafka", "Microservices", "Apache Camel", "Multithreading"]}
-                  />
-                  <TimelineItem 
-                    year="2024" 
-                    title="Software Developer Intern · Hograth" 
-                    location="Gurugram, Haryana"
-                    description="Enhanced email campaigns and created product display pages for major brands, improving user engagement by 5%."
-                    technologies={["HTML", "CSS", "JavaScript", "Email Marketing"]}
-                  />
-                  <TimelineItem 
-                    year="2024" 
-                    title="Bachelor's in Computer Science · TIET" 
-                    location="Patiala, Punjab"
-                    description="Graduated with expertise in computer science fundamentals and software engineering principles."
-                    technologies={["Java", "Algorithms", "Data Structures", "Software Engineering"]}
-                  />
-                </div>
-              </GlassCard>
-            </motion.div>
-
-            {/* Skills */}
-            <motion.div
-              initial={{ opacity: 0, x: 80 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <GlassCard title="Technical Stack" className="h-full">
-                <div className="space-y-8">
-                  <SkillCategory title="Backend Technologies" icon="⚡">
-                    <Skill name="Java & Spring Boot" level={95} color="from-cyan-500 to-blue-500" />
-                    <Skill name="REST API Design" level={90} color="from-blue-500 to-purple-500" />
-                    <Skill name="Microservices" level={85} color="from-purple-500 to-pink-500" />
-                    <Skill name="Apache Kafka" level={80} color="from-pink-500 to-red-500" />
-                  </SkillCategory>
-
-                  <SkillCategory title="Frontend & Tools" icon="🎨">
-                    <Skill name="React & TypeScript" level={85} color="from-cyan-500 to-blue-500" />
-                    <Skill name="HTML/CSS/JavaScript" level={90} color="from-blue-500 to-purple-500" />
-                    <Skill name="Git & CI/CD" level={85} color="from-purple-500 to-pink-500" />
-                    <Skill name="AWS & Kubernetes" level={75} color="from-pink-500 to-red-500" />
-                  </SkillCategory>
-
-                  <SkillCategory title="Databases" icon="💾">
-                    <Skill name="MySQL" level={88} color="from-cyan-500 to-blue-500" />
-                    <Skill name="Hibernate/JDBC" level={85} color="from-blue-500 to-purple-500" />
-                    <Skill name="NoSQL" level={70} color="from-purple-500 to-pink-500" />
-                  </SkillCategory>
-                </div>
-              </GlassCard>
-            </motion.div>
+          <div className="w-full max-w-6xl mx-auto">
+            <GlassCard className="p-12">
+              <div className="space-y-8">
+                <TimelineItem 
+                  year="2024 - Present" 
+                  title="Specialist Programmer · Infosys" 
+                  location="Bangalore, Karnataka"
+                  description="Transformed legacy TDS system to Spring Boot microservices, implemented Kafka pipelines, and optimized performance with multithreading."
+                  technologies={["Spring Boot", "Apache Kafka", "Microservices", "Apache Camel", "Multithreading"]}
+                />
+                <TimelineItem 
+                  year="2024" 
+                  title="Software Developer Intern · Hograth" 
+                  location="Gurugram, Haryana"
+                  description="Enhanced email campaigns and created product display pages for major brands, improving user engagement by 5%."
+                  technologies={["HTML", "CSS", "JavaScript", "Email Marketing"]}
+                />
+                <TimelineItem 
+                  year="2024" 
+                  title="Bachelor's in Computer Science · TIET" 
+                  location="Patiala, Punjab"
+                  description="Graduated with expertise in computer science fundamentals and software engineering principles."
+                  technologies={["Java", "Algorithms", "Data Structures", "Software Engineering"]}
+                />
+              </div>
+            </GlassCard>
           </div>
         </motion.section>
 
-        {/* CONTACT SECTION - Full Width */}
+        {/* CONTACT SECTION - Same as before */}
         <motion.section 
           id="contact" 
           className="w-full mt-40"
@@ -540,22 +626,38 @@ export default function AdvancedPortfolio(): JSX.Element {
                 </div>
 
                 <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const form = e.target as HTMLFormElement;
-                    const fd = new FormData(form);
-                    const name = fd.get("name");
-                    const message = fd.get("message");
-                    window.location.href = `mailto:prathamgupta4174@gmail.com?subject=Portfolio Contact from ${encodeURIComponent(
-                      String(name || "")
-                    )}&body=${encodeURIComponent(String(message || ""))}`;
-                  }}
+                  onSubmit={handleSubmit}
                   className="space-y-6"
                 >
+                  <AnimatePresence>
+                    {submitStatus === "success" && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className="p-4 rounded-2xl bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300"
+                      >
+                        ✅ Message sent successfully! I'll get back to you soon.
+                      </motion.div>
+                    )}
+                    {submitStatus === "error" && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className="p-4 rounded-2xl bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300"
+                      >
+                        ❌ There was an error sending your message. Please try again or email me directly.
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
                   <div>
                     <input 
                       name="name" 
                       placeholder="Your full name" 
+                      value={formData.name}
+                      onChange={handleInputChange}
                       className="w-full p-4 rounded-2xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-4 focus:ring-cyan-500/30 transition-all text-lg"
                       required 
                     />
@@ -565,6 +667,8 @@ export default function AdvancedPortfolio(): JSX.Element {
                       name="email" 
                       placeholder="Your email address" 
                       type="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
                       className="w-full p-4 rounded-2xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all text-lg"
                       required 
                     />
@@ -574,6 +678,8 @@ export default function AdvancedPortfolio(): JSX.Element {
                       name="message" 
                       placeholder="Tell me about your project, opportunity, or just say hello..." 
                       rows={6}
+                      value={formData.message}
+                      onChange={handleInputChange}
                       className="w-full p-4 rounded-2xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-4 focus:ring-purple-500/30 transition-all text-lg resize-none"
                       required 
                     />
@@ -581,11 +687,26 @@ export default function AdvancedPortfolio(): JSX.Element {
 
                   <motion.button 
                     type="submit"
-                    className="w-full py-5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-lg shadow-2xl hover:shadow-3xl transition-all duration-300"
-                    whileHover={{ scale: 1.02, y: -2 }}
+                    disabled={isSubmitting}
+                    className="w-full py-5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    whileHover={{ scale: isSubmitting ? 1 : 1.02, y: isSubmitting ? 0 : -2 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <Mail size={24} className="inline mr-3" /> Send Message
+                    {isSubmitting ? (
+                      <div className="flex items-center justify-center gap-2">
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        >
+                          ⏳
+                        </motion.div>
+                        Sending...
+                      </div>
+                    ) : (
+                      <>
+                        <Mail size={24} className="inline mr-3" /> Send Message
+                      </>
+                    )}
                   </motion.button>
                 </form>
               </div>
@@ -602,7 +723,7 @@ export default function AdvancedPortfolio(): JSX.Element {
         >
           <div className="bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 rounded-3xl p-8 backdrop-blur-sm border border-white/20">
             <p className="text-xl text-gray-600 dark:text-gray-400">
-              © Pratham Gupta — Crafted with using React, TypeScript & Framer Motion
+              © Pratham Gupta — Crafted using React, TypeScript & Framer Motion
             </p>
           </div>
         </motion.footer>
@@ -612,7 +733,7 @@ export default function AdvancedPortfolio(): JSX.Element {
 }
 
 /* ----------------------
-   Enhanced Subcomponents
+   Advanced Subcomponents
    ---------------------- */
 
 function Stat({ label, value, delay = 0, color }: { label: string; value: string; delay?: number; color: string }) {
@@ -706,37 +827,94 @@ function TimelineItem({ year, title, location, description, technologies }: {
   );
 }
 
-function SkillCategory({ title, children, icon }: { title: string; children: React.ReactNode; icon: string }) {
+// ADVANCED SKILL COMPONENTS
+function SkillCategorySection({ title, skills, delay }: { 
+  title: string; 
+  skills: Array<{name: string, icon: any, level: number, category: string}>;
+  delay: number;
+}) {
+  if (skills.length === 0) return null;
+
   return (
-    <div>
-      <div className="flex items-center gap-3 mb-6">
-        <span className="text-2xl">{icon}</span>
-        <h5 className="font-bold text-xl text-gray-800 dark:text-gray-200">{title}</h5>
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay }}
+      viewport={{ once: true }}
+      className="bg-gradient-to-br from-white/60 to-white/40 dark:from-gray-800/60 dark:to-gray-800/40 backdrop-blur-sm rounded-3xl p-6 border border-white/30 shadow-2xl"
+    >
+      <h4 className="text-xl font-bold mb-6 bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+        {title}
+      </h4>
+      <div className="space-y-4">
+        {skills.map((skill, index) => (
+          <AdvancedSkillCard
+            key={skill.name}
+            skill={skill}
+            delay={delay + index * 0.1}
+          />
+        ))}
       </div>
-      <div className="space-y-6">
-        {children}
-      </div>
-    </div>
+    </motion.div>
   );
 }
 
-function Skill({ name, level, color }: { name: string; level: number; color: string }) {
+function AdvancedSkillCard({ skill, delay }: { 
+  skill: {name: string, icon: any, level: number, category: string};
+  delay: number;
+}) {
+  const IconComponent = skill.icon;
+  
   return (
-    <div>
-      <div className="flex justify-between text-base mb-3">
-        <span className="font-semibold text-gray-700 dark:text-gray-300">{name}</span>
-        <span className="font-mono font-bold text-cyan-600 dark:text-cyan-400">{level}%</span>
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ delay }}
+      viewport={{ once: true }}
+      className="group relative"
+    >
+      <div className="flex items-center justify-between p-4 rounded-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-white/30 hover:shadow-xl transition-all duration-300">
+        <div className="flex items-center gap-4 flex-1">
+          <div className="p-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg">
+            <IconComponent size={20} />
+          </div>
+          <div className="flex-1">
+            <h5 className="font-semibold text-gray-800 dark:text-gray-200">{skill.name}</h5>
+            <p className="text-sm text-gray-600 dark:text-gray-400">{skill.category}</p>
+          </div>
+        </div>
+        
+        {/* Skill level indicator */}
+        <div className="flex items-center gap-2">
+          <div className="w-20 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: `${skill.level}%` }}
+              transition={{ duration: 1, delay: delay + 0.3, ease: "easeOut" }}
+              viewport={{ once: true }}
+              className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full relative"
+            >
+              <motion.div
+                className="absolute inset-0 bg-white/40"
+                initial={{ x: "-100%" }}
+                whileInView={{ x: "100%" }}
+                transition={{ duration: 1.5, delay: delay + 0.5, repeat: Infinity, repeatDelay: 2 }}
+                viewport={{ once: true }}
+              />
+            </motion.div>
+          </div>
+          <span className="text-xs font-bold text-gray-500 dark:text-gray-400 w-8">
+            {skill.level}%
+          </span>
+        </div>
       </div>
-      <div className="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-3 overflow-hidden shadow-inner">
-        <motion.div 
-          initial={{ width: 0 }}
-          whileInView={{ width: `${level}%` }}
-          transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
-          viewport={{ once: true }}
-          className={`h-3 rounded-full bg-gradient-to-r ${color} shadow-lg`}
-        />
-      </div>
-    </div>
+      
+      {/* Hover effect */}
+      <motion.div
+        className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
+        whileHover={{ scale: 1.02 }}
+      />
+    </motion.div>
   );
 }
 
@@ -782,6 +960,8 @@ function ProjectCard({ project, index, isActive, onHover }: {
                 {project.github && (
                   <motion.a 
                     href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     whileHover={{ scale: 1.3, rotate: 360 }}
                     whileTap={{ scale: 0.9 }}
                     className="p-3 rounded-2xl bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-200 dark:hover:bg-cyan-800/50 transition-colors shadow-lg"
@@ -792,6 +972,8 @@ function ProjectCard({ project, index, isActive, onHover }: {
                 {project.live && (
                   <motion.a 
                     href={project.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     whileHover={{ scale: 1.3, rotate: 360 }}
                     whileTap={{ scale: 0.9 }}
                     className="p-3 rounded-2xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors shadow-lg"
