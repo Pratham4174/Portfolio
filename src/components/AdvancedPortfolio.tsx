@@ -79,7 +79,7 @@ const skillsData = {
 };
 
 export default function AdvancedPortfolio(): JSX.Element {
-  const [dark, setDark] = useState<boolean>(false);
+  
   const [projects, setProjects] = useState<Project[]>([]);
   const [activeProject, setActiveProject] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -101,9 +101,7 @@ export default function AdvancedPortfolio(): JSX.Element {
     return () => clearTimeout(t);
   }, []);
 
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
-  }, [dark]);
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
