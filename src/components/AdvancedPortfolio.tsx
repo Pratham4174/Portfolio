@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Calendar, Cloud, Code, Container, Database, DownloadCloud, ExternalLink, GitBranch, Github, Layers, Linkedin, Mail, MapPin, Phone, Server, Sparkles, Terminal, Workflow, Zap } from "lucide-react";
 import React, { useEffect, useState, type JSX } from "react";
 import Tilt from "react-parallax-tilt";
-import resumePDF from '../assets/Pratham_Res_B.pdf';
+
 
 type Project = {
   id: string;
@@ -269,7 +269,7 @@ export default function AdvancedPortfolio(): JSX.Element {
               </motion.a>
 
               <motion.a
-                href={resumePDF}
+                href="/Pratham_Res_B.pdf"
                 className="inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-300 dark:border-gray-600 font-bold text-base sm:text-lg hover:shadow-2xl transition-all duration-300"
                 whileHover={{ scale: 1.05, y: -3 }}
                 whileTap={{ scale: 0.95 }}
